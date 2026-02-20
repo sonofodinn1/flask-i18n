@@ -35,7 +35,7 @@ class Translations:
         app.config.setdefault('TRANSLATIONS_PRELOAD', True)
         app.config.setdefault('TRANSLATIONS_CACHE_TIMEOUT', None)
         app.config.setdefault('TRANSLATIONS_PROVIDER_AUTH_HEADER', None)
-        app.config.setdefault('TRANSLATIONS_PROVIDER_URL_TEMPLATE', None)
+        app.config.setdefault('TRANSLATIONS_PROVIDER_URL', None)
         app.config.setdefault('TRANSLATIONS_PROVIDER_TOKEN', None)
         app.config.setdefault('TRANSLATIONS_PROVIDER_TIMEOUT', 20)
 
@@ -195,9 +195,15 @@ class Translations:
                 "Missing TRANSLATIONS_PROVIDER_TOKEN. Set app.config['TRANSLATIONS_PROVIDER_TOKEN'] or env var TRANSLATIONS_PROVIDER_TOKEN."
             )
 
-        base_url = cfg.get('TRANSLATIONS_PROVIDER_URL_TEMPLATE')
+        base_url = cfg.get('TRANSLATIONS_PROVIDER_URL')
+        
+        if not base_url:
+            raise click.ClickException(
+                "Missing TRANSLATIONS_PROVIDER_URL. Set app.config['TRANSLATIONS_PROVIDER_URL'] or env var TRANSLATIONS_PROVIDER_URL."
+            )
+
         translations_dir = cfg.get('TRANSLATIONS_DIR', 'translations')
-        auth_header = cfg.get('TRANSLATIONS_PROVIDER_AUTH_HEADER')
+        auth_header = cfg.get('TRANSLATIONS_PROVIDER_AUTH_HEADER', 'Authorization')
         timeout = cfg.get('TRANSLATIONS_PROVIDER_TIMEOUT', 20)
 
         try:
